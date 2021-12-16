@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:pointycastle/export.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-import 'Models/Movie.dart';
+import '../models/movie.dart';
 
 Uint8List _convertStringToUint8List(String str) =>
     Uint8List.fromList(str.codeUnits);
@@ -25,8 +25,6 @@ Uint8List _addStupidZeros(Uint8List original) {
 const _keyString = "WatchingMovies12";
 final _keyWithZeros = _addStupidZeros(_convertStringToUint8List(_keyString));
 
-
-
 Future<Uint8List> _readFile(String filepath) async {
   final file = File(filepath);
   return await file.readAsBytes();
@@ -38,7 +36,7 @@ Uint8List getDataFromBytes(Uint8List bytes) => bytes.sublist(16);
 
 Uint8List _decryptData(Uint8List key, Uint8List iv, Uint8List cipher) {
   var aesCbc = BlockCipher('AES/CBC')
-    ..init(false, ParametersWithIV( KeyParameter(key), iv));
+    ..init(false, ParametersWithIV(KeyParameter(key), iv));
   final paddedPlainText = Uint8List(cipher.length); // allocate space
   var offset = 0;
   while (offset < cipher.length) {
@@ -49,7 +47,7 @@ Uint8List _decryptData(Uint8List key, Uint8List iv, Uint8List cipher) {
   //this removes strange 0x07 which appear behind the closing bracket
   final closingBracket = Uint8List.fromList("]".codeUnits)[0];
   final closingBracketIndex = paddedPlainText.lastIndexOf(closingBracket);
-  final plainText = paddedPlainText.sublist(0, closingBracketIndex+1);
+  final plainText = paddedPlainText.sublist(0, closingBracketIndex + 1);
 
   return plainText;
 }

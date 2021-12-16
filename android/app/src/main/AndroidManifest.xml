@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.ferris.flutterino">
    <application
-        android:label="flutterino"
+        android:label="Flutterino"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
