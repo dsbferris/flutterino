@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class MyDrawer extends StatelessWidget{
+class MyDrawer extends StatelessWidget {
   const MyDrawer({Key? key}) : super(key: key);
 
   @override
@@ -12,15 +12,16 @@ class MyDrawer extends StatelessWidget{
         children: <Widget>[
           DrawerHeader(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(FontAwesomeIcons.crow),
-                const Spacer(),
-                Expanded(
-                  child: Text(
-                    "Pages",
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                )
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Icon(FontAwesomeIcons.ethereum, size: 50),
+                ),
+                Text(
+                  "Flutterino",
+                  style: Theme.of(context).textTheme.headline4,
+                ),
               ],
             ),
             decoration: const BoxDecoration(
@@ -48,10 +49,15 @@ class MyDrawer extends StatelessWidget{
               Navigator.pushNamed(context, '/list');
             },
           ),
+          ListTile(
+            leading: const Icon(FontAwesomeIcons.solidStar),
+            title: const Text("Favourites"),
+            onTap: () {
+              Navigator.pushNamed(context, '/favourites', arguments: true);
+            },
+          ),
         ],
       ),
     );
   }
-
-
 }
