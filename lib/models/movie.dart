@@ -1,9 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'additional_movie_info.dart';
-import 'package:flutterino/helpers/asset_helper.dart';
 
 part 'movie.g.dart';
-
 
 @JsonSerializable(fieldRename: FieldRename.pascal)
 class Movie {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterino/widgets/my_drawer.dart';
 
 class MyFavouritesPage extends StatefulWidget {
   const MyFavouritesPage({Key? key}) : super(key: key);
@@ -14,6 +15,7 @@ class _MyFavouritesPageState extends State<MyFavouritesPage> {
       appBar: AppBar(
         title: const Text("Favourties"),
       ),
+      drawer: const MyDrawer(),
       body: const Placeholder(),
     );
   }

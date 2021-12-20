@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -10,6 +11,34 @@ import 'package:flutterino/pages/my_list_page.dart';
 import 'models/movie.dart';
 import 'pages/my_home_page.dart';
 import 'helpers/asset_helper.dart';
+import 'helpers/globals.dart' as globals;
+
+void sortMoviesAndSeries(List<Movie> allMovies) {
+  List<String?> seriesList = allMovies
+      .where((element) => element.info?.serienName != null)
+      .map((e) => e.info?.serienName)
+      .toSet() //toSet for only distinct values
+      .toList()
+    ..sort();
+
+  var seriesMap = HashMap<String, List<Movie>>();
+  for (var s in seriesList) {
+    if (s != null && s.isNotEmpty) {
+      var moviesOfSeries =
+          allMovies.where((element) => element.info?.serienName == s);
+      if (moviesOfSeries.length > 1) {
+        //Only map those, that contain more then 1 movie
+        seriesMap[s] = moviesOfSeries.toList();
+      }
+    }
+  }
+  var allSeriesValues =
+      seriesMap.values.reduce((value, element) => value += element);
+  var moviesWithoutSeries = List.from(allMovies)
+    ..removeWhere((element) => allSeriesValues.contains(element));
+  assert(
+      allMovies.length == allSeriesValues.length + moviesWithoutSeries.length);
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,14 +46,16 @@ Future<void> main() async {
       (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
     await DesktopWindow.setWindowSize(const Size(360, 740));
   }
-  var movies = await getMoviesFromAsset();
+  List<Movie> movies = await getMoviesFromAsset();
+  globals.movies = movies;
+
   runApp(MyApp(movies: movies));
 }
 
 class MyApp extends StatelessWidget {
-  final List<Movie> movies;
-
   const MyApp({Key? key, required this.movies}) : super(key: key);
+
+  final List<Movie> movies;
 
   // This widget is the root of your application.
   @override
@@ -50,7 +81,7 @@ class MyApp extends StatelessWidget {
         '/filter': (context) => const MyFilterPage(),
         '/favourites': (context) => const MyFavouritesPage(),
       },
-      initialRoute: '/',
+      initialRoute: '/list',
     );
   }
 }

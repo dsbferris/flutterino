@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutterino/widgets/my_drawer.dart';
 
 class MyFilterPage extends StatefulWidget {
   const MyFilterPage({Key? key}) : super(key: key);
+
   @override
   State<MyFilterPage> createState() => _MyFilterPageState();
 }
@@ -13,11 +15,8 @@ class _MyFilterPageState extends State<MyFilterPage> {
       appBar: AppBar(
         title: const Text("Filter Page"),
       ),
-      body: Center(
-        child: Column(
-          children: const [Text("Test")],
-        ),
-      ),
+      drawer: const MyDrawer(),
+      body: const Placeholder(),
     );
   }
 }
