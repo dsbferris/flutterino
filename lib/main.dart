@@ -25,7 +25,7 @@ void sortMoviesAndSeries(List<Movie> allMovies) {
   for (var s in seriesList) {
     if (s != null && s.isNotEmpty) {
       var moviesOfSeries =
-          allMovies.where((element) => element.info?.serienName == s);
+      allMovies.where((element) => element.info?.serienName == s);
       if (moviesOfSeries.length > 1) {
         //Only map those, that contain more then 1 movie
         seriesMap[s] = moviesOfSeries.toList();
@@ -33,29 +33,43 @@ void sortMoviesAndSeries(List<Movie> allMovies) {
     }
   }
   var allSeriesValues =
-      seriesMap.values.reduce((value, element) => value += element);
+  seriesMap.values.reduce((value, element) => value += element);
   var moviesWithoutSeries = List.from(allMovies)
     ..removeWhere((element) => allSeriesValues.contains(element));
   assert(
-      allMovies.length == allSeriesValues.length + moviesWithoutSeries.length);
+  allMovies.length == allSeriesValues.length + moviesWithoutSeries.length);
 }
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+
+  //Load default routes
+  final Map<String, Widget Function(BuildContext)> _routes = {
+    '/': (context) => const MyHomePage(),
+    '/list': (context) => MyListPage(movies: _movies),
+    '/filter': (context) => const MyFilterPage(),
+    //'/favourites': (context) => const MyFavouritesPage(),
+  };
+  //Add spacer line and "Add new Set" item
+  _routes['/favourites'] = (context) => const MyFavouritesPage();
+
+  runApp(MyApp(routes: _routes));
+
+  //Set default window size for debugging on desktop
+  //WidgetsFlutterBinding.ensureInitialized();
   if (kDebugMode &&
       (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
     await DesktopWindow.setWindowSize(const Size(360, 740));
   }
-  List<Movie> movies = await getMoviesFromAsset();
-  globals.movies = movies;
 
-  runApp(MyApp(movies: movies));
+  //Load movies from Json asset
+  //var _movies = await getMoviesFromAsset();
+  List<Movie> _movies = [];
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key, required this.movies}) : super(key: key);
+  const MyApp({Key? key, required this.routes}) : super(key: key);
 
-  final List<Movie> movies;
+  final Map<String, Widget Function(BuildContext)> routes;
 
   // This widget is the root of your application.
   @override
@@ -75,12 +89,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
       ),
       //home: const MyHomePage(title: 'Flutterino Home Page'),
-      routes: {
-        '/': (context) => const MyHomePage(),
-        '/list': (context) => MyListPage(movies: movies),
-        '/filter': (context) => const MyFilterPage(),
-        '/favourites': (context) => const MyFavouritesPage(),
-      },
+      routes: routes,
       initialRoute: '/list',
     );
   }
