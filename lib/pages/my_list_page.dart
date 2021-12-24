@@ -1,31 +1,41 @@
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterino/models/additional_movie_info.dart';
 import 'package:flutterino/models/movie.dart';
 import 'package:flutterino/widgets/my_drawer.dart';
 import 'my_movie_detail_page.dart';
+import 'package:flutterino/helpers/asset_helper.dart' as assets;
 
 class MyListPage extends StatelessWidget {
-  const MyListPage({Key? key, required this.movies}) : super(key: key);
+  const MyListPage({Key? key}) : super(key: key);
 
-  final List<Movie> movies;
+  static Future<List<Movie>> futureMovies = assets.getMoviesFromAsset();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("List Page"),
-      ),
-      drawer: const MyDrawer(),
-      body: ListView.builder(
-        itemCount: movies.length,
-        itemBuilder: (context, index) {
-          var movie = movies[index];
-          return MyListTileItem(movie: movie);
-          //return ListTile(title: Text(movie.name),);
-        },
-      ),
-    );
+        appBar: AppBar(
+          title: const Text("List Page"),
+        ),
+        drawer: const MyDrawer(),
+        body: FutureBuilder<List<Movie>>(
+          future: futureMovies,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  var movie = snapshot.data![index];
+                  return MyListTileItem(movie: movie);
+                  //return ListTile(title: Text(movie.name),);
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            } else {
+              return const CircularProgressIndicator();
+            }
+          },
+        ));
   }
 }
 
@@ -41,52 +51,37 @@ class MyListTileItem extends StatelessWidget {
     return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 
-  Flexible _getNotOverflowingText(String genre, BuildContext context) {
-    return Flexible(
-      child: Text(
-        genre,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
-
-  ListTile _getListTileWithAMI(BuildContext context,
-      String title, String size, String runtime, String genre) {
-
+  ListTile _getListTileWithAMI(BuildContext context, String title, String size,
+      String runtime, String genre) {
     return ListTile(
-        title: Text(title),
-        subtitle: Row(
-          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(size),
-            ),
-
-            if (runtime.isNotEmpty) ...{
-              Align(
-                alignment: Alignment.center,
-                child: Text(runtime),
+      title: Text(title),
+      subtitle: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(size),
+          if (runtime.isNotEmpty) ...{
+            Text(runtime),
+          },
+          if (genre.isNotEmpty) ...{
+            Flexible(
+              child: Text(
+                genre,
+                overflow: TextOverflow.ellipsis,
               ),
-            },
-            //if (genre.isNotEmpty) const SizedBox(width: 10,),
-            if (genre.isNotEmpty) ...{
-              Align(
-                alignment: Alignment.centerRight,
-                child: _getNotOverflowingText(genre, context),
-              ),
-            },
-          ],
-        ),
-        isThreeLine: false,
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MyMovieDetailPage(movie: movie),
             ),
-          );
-        });
+          },
+        ],
+      ),
+      isThreeLine: true,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyMovieDetailPage(movie: movie),
+          ),
+        );
+      },
+    );
   }
 
   ListTile _getListTileWithoutAMI(Movie movie, BuildContext context) {
@@ -107,10 +102,9 @@ class MyListTileItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var info = movie.info;
-    if (info == null){
+    if (info == null) {
       return _getListTileWithoutAMI(movie, context);
-    }
-    else{
+    } else {
       String runtime = "";
       var seconds = info.lengthSeconds ?? 0;
       var minutes = info.lengthMinutes ?? 0;
@@ -125,11 +119,71 @@ class MyListTileItem extends StatelessWidget {
       var size = filesize(movie.fileSize).padLeft(10);
       return _getListTileWithAMI(context, title, size, runtime, genre);
     }
-    /*
-    return info == null
-        ? _getListTileWithoutAMI(movie, context)
-        : _getListTileWithAMI(movie, info, context);
+  }
+}
 
-     */
+class MyDataPage extends StatelessWidget {
+  const MyDataPage({Key? key}) : super(key: key);
+
+  static Future<List<Movie>> futureMovies = assets.getMoviesFromAsset();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Data Page"),
+      ),
+      drawer: const MyDrawer(),
+      body: const MyDataTable(),
+    );
+  }
+}
+
+class MyDataTable extends StatelessWidget {
+  const MyDataTable({Key? key}) : super(key: key);
+
+  static Future<List<Movie>> futureMovies = assets.getMoviesFromAsset();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Movie>>(
+      future: futureMovies,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return DataTable(
+              columns: const <DataColumn>[
+                DataColumn(
+                  label: Text(
+                    'Title',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Runtime',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Size',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+              ],
+              rows: snapshot.data!
+                  .map((movie) => DataRow(
+                        cells: [
+                          DataCell(Text(movie.name)),
+                          DataCell(Text(filesize(movie.fileSize))),
+                          DataCell(Text(filesize(movie.fileSize))),
+                        ],
+                      ))
+                  .toList());
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
+    );
   }
 }

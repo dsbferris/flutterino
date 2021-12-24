@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:pointycastle/export.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -63,7 +62,6 @@ Future<List<dynamic>> getMoviesFromFile(String filepath) async {
   final json = jsonDecode(plainString);
   return json;
 }
-
 
 Future<Uint8List> _loadAsset() async {
   final data = await rootBundle.load('assets/movies.json.encrypted');
