@@ -10,7 +10,7 @@ import 'package:flutterino/pages/my_list_page.dart';
 
 import 'models/movie.dart';
 import 'pages/my_home_page.dart';
-import 'helpers/asset_helper.dart';
+import 'helpers/asset_helper.dart' as asset;
 import 'helpers/globals.dart' as globals;
 
 void sortMoviesAndSeries(List<Movie> allMovies) {
@@ -40,19 +40,23 @@ void sortMoviesAndSeries(List<Movie> allMovies) {
   allMovies.length == allSeriesValues.length + moviesWithoutSeries.length);
 }
 
-void main() async {
-
+Map<String, Widget Function(BuildContext)> getRoutes(List<Movie> movies){
   //Load default routes
   final Map<String, Widget Function(BuildContext)> _routes = {
     '/': (context) => const MyHomePage(),
-    '/list': (context) => MyListPage(movies: _movies),
+    '/list': (context) => MyListPage(movies: movies),
     '/filter': (context) => const MyFilterPage(),
     //'/favourites': (context) => const MyFavouritesPage(),
   };
   //Add spacer line and "Add new Set" item
   _routes['/favourites'] = (context) => const MyFavouritesPage();
 
-  runApp(MyApp(routes: _routes));
+  return _routes;
+}
+
+void main() async {
+
+  runApp(const MyApp());
 
   //Set default window size for debugging on desktop
   //WidgetsFlutterBinding.ensureInitialized();
@@ -61,19 +65,20 @@ void main() async {
     await DesktopWindow.setWindowSize(const Size(360, 740));
   }
 
-  //Load movies from Json asset
-  //var _movies = await getMoviesFromAsset();
-  List<Movie> _movies = [];
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key, required this.routes}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
-  final Map<String, Widget Function(BuildContext)> routes;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    final List<Movie> movies = asset.getMoviesFromAsset();
+
+    final Map<String, Widget Function(BuildContext)> routes = getRoutes(movies);
+
     return MaterialApp(
       title: 'Flutterino',
       theme: ThemeData(
