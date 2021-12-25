@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:io';
+// import 'dart:io';
 import 'package:pointycastle/export.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -25,14 +25,16 @@ Uint8List _addStupidZeros(Uint8List original) {
 const _keyString = "WatchingMovies12";
 final _keyWithZeros = _addStupidZeros(_convertStringToUint8List(_keyString));
 
+/*
 Future<Uint8List> _readFile(String filepath) async {
   final file = File(filepath);
   return await file.readAsBytes();
 }
+ */
 
-Uint8List getIVFromBytes(Uint8List bytes) => bytes.sublist(0, 16);
+Uint8List _getIVFromBytes(Uint8List bytes) => bytes.sublist(0, 16);
 
-Uint8List getDataFromBytes(Uint8List bytes) => bytes.sublist(16);
+Uint8List _getDataFromBytes(Uint8List bytes) => bytes.sublist(16);
 
 Uint8List _decryptData(Uint8List key, Uint8List iv, Uint8List cipher) {
   var aesCbc = BlockCipher('AES/CBC')
@@ -51,17 +53,18 @@ Uint8List _decryptData(Uint8List key, Uint8List iv, Uint8List cipher) {
 
   return plainText;
 }
-
-Future<List<dynamic>> getMoviesFromFile(String filepath) async {
+/*
+Future<List<dynamic>> _getMoviesFromFile(String filepath) async {
   final key = _keyWithZeros;
   final fileBytes = await _readFile(filepath);
-  final iv = getIVFromBytes(fileBytes);
-  final cipher = getDataFromBytes(fileBytes);
+  final iv = _getIVFromBytes(fileBytes);
+  final cipher = _getDataFromBytes(fileBytes);
   final plain = _decryptData(key, iv, cipher);
   final plainString = _convertUint8ListToString(plain);
   final json = jsonDecode(plainString);
   return json;
 }
+ */
 
 Future<Uint8List> _loadAsset() async {
   final data = await rootBundle.load('assets/movies.json.encrypted');
@@ -71,8 +74,8 @@ Future<Uint8List> _loadAsset() async {
 Future<List<Movie>> getMoviesFromAsset() async {
   final key = _keyWithZeros;
   final fileBytes = await _loadAsset();
-  final iv = getIVFromBytes(fileBytes);
-  final cipher = getDataFromBytes(fileBytes);
+  final iv = _getIVFromBytes(fileBytes);
+  final cipher = _getDataFromBytes(fileBytes);
   final plain = _decryptData(key, iv, cipher);
   final plainString = _convertUint8ListToString(plain);
   final Iterable l = jsonDecode(plainString);

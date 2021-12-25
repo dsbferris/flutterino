@@ -12,7 +12,10 @@ import 'pages/my_list_page.dart';
 import 'pages/my_home_page.dart';
 import 'pages/my_template_page.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  runApp(const MyApp());
+  await setDesktopSize();
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -20,11 +23,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode &&
-        (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
-      DesktopWindow.setWindowSize(const Size(360, 740)).then((value) => null);
-    }
-
     return MaterialApp(
       title: 'Flutterino',
       theme: ThemeData(
@@ -33,7 +31,7 @@ class MyApp extends StatelessWidget {
       //home: const MyHomePage(title: 'Flutterino Home Page'),
       routes: {
         '/': (context) => const MyTemplatePage(),
-        '/home' : (context) => const MyHomePage(),
+        '/home': (context) => const MyHomePage(),
         '/list': (context) => const MyListPage(),
         '/filter': (context) => const MyFilterPage(),
         '/favourites': (context) => const MyFavouritesPage(),
@@ -70,11 +68,11 @@ void sortMoviesAndSeries(List<Movie> allMovies) {
       allMovies.length == allSeriesValues.length + moviesWithoutSeries.length);
 }
 
-void setDesktopSize() async {
+Future<dynamic> setDesktopSize() async {
   //Set default window size for debugging on desktop
-  //WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   if (kDebugMode &&
       (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
-    await DesktopWindow.setWindowSize(const Size(360, 740));
+    return await DesktopWindow.setWindowSize(const Size(360, 740));
   }
 }

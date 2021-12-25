@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutterino/pages/my_list_page.dart';
 import 'package:flutterino/widgets/my_drawer.dart';
+
+import 'my_data_page.dart';
 
 class MyTemplatePage extends StatefulWidget {
   const MyTemplatePage({Key? key}) : super(key: key);
