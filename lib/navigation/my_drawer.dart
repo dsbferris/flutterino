@@ -29,31 +29,38 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(FontAwesomeIcons.home),
-            title: const Text("Home"),
+            leading: const Icon(FontAwesomeIcons.americanSignLanguageInterpreting),
+            title: const Text("Template"),
             onTap: () {
               Navigator.pushNamed(context, '/');
             },
           ),
           ListTile(
-            leading: const Icon(FontAwesomeIcons.filter),
-            title: const Text("Filter"),
+            leading: const Icon(FontAwesomeIcons.home),
+            title: const Text("Home"),
             onTap: () {
-              Navigator.pushNamed(context, '/filter');
+              Navigator.pushNamed(context, '/home');
             },
           ),
           ListTile(
-            leading: const Icon(FontAwesomeIcons.list),
-            title: const Text("List"),
+            leading: const Icon(FontAwesomeIcons.hands),
+            title: const Text("List of All"),
             onTap: () {
-              Navigator.pushNamed(context, '/list');
+              Navigator.pushNamed(context, '/listOfAll');
             },
           ),
           ListTile(
-            leading: const Icon(FontAwesomeIcons.solidStar),
-            title: const Text("Favourites"),
+            leading: const Icon(FontAwesomeIcons.columns),
+            title: const Text("My Collections"),
             onTap: () {
-              Navigator.pushNamed(context, '/favourites', arguments: true);
+              Navigator.pushNamed(context, '/myCollections');
+            },
+          ),
+          ListTile(
+            leading: const Icon(FontAwesomeIcons.cogs),
+            title: const Text("Settings"),
+            onTap: () {
+              Navigator.pushNamed(context, '/settings');
             },
           ),
         ],

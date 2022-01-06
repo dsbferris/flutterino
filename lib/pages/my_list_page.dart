@@ -1,7 +1,7 @@
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterino/models/movie.dart';
-import 'package:flutterino/widgets/my_drawer.dart';
+import 'package:flutterino/navigation/my_drawer.dart';
 import 'my_movie_detail_page.dart';
 import 'package:flutterino/helpers/asset_helper.dart' as assets;
 

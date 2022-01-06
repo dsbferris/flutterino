@@ -1,19 +1,21 @@
 import 'dart:collection';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:desktop_window/desktop_window.dart';
 
 import 'models/movie.dart';
-import 'pages/my_favourites_page.dart';
-import 'pages/my_filter_page.dart';
+
+import 'pages/my_collections_overview_page.dart';
+import 'pages/my_settings_page.dart';
 import 'pages/my_list_page.dart';
 import 'pages/my_home_page.dart';
 import 'pages/my_template_page.dart';
 
+
 void main() async {
   runApp(const MyApp());
+  //Set Size lazy after loading application
   await setDesktopSize();
 }
 
@@ -32,9 +34,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MyTemplatePage(),
         '/home': (context) => const MyHomePage(),
-        '/list': (context) => const MyListPage(),
-        '/filter': (context) => const MyFilterPage(),
-        '/favourites': (context) => const MyFavouritesPage(),
+        '/listOfAll': (context) => const MyListPage(),
+        '/settings': (context) => const MySettingsPage(),
+        '/myCollections': (context) => const MyCollectionsOverviewPage(),
       },
       initialRoute: '/',
     );

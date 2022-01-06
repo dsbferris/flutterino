@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutterino/widgets/my_drawer.dart';
+import 'package:flutterino/navigation/my_drawer.dart';
 
-class MyFilterPage extends StatelessWidget {
-  const MyFilterPage({Key? key}) : super(key: key);
+class MySettingsPage extends StatelessWidget {
+  const MySettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
