@@ -19,4 +19,11 @@ class Movie {
   factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 
   Map<String, dynamic> toJson() => _$MovieToJson(this);
+
+  String getVideoFilePath() {
+    var baseString = "smb://ferris:password@";
+    var path =
+        filePath.replaceAll(RegExp(r'\\'), "/").replaceFirst(RegExp("//"), "");
+    return baseString + path;
+  }
 }

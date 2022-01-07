@@ -29,7 +29,8 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(FontAwesomeIcons.americanSignLanguageInterpreting),
+            leading:
+                const Icon(FontAwesomeIcons.americanSignLanguageInterpreting),
             title: const Text("Template"),
             onTap: () {
               Navigator.pushNamed(context, '/');

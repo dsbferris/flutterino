@@ -9,12 +9,12 @@ import 'models/movie.dart';
 import 'pages/my_collections_overview_page.dart';
 import 'pages/my_settings_page.dart';
 import 'pages/my_list_page.dart';
-import 'pages/my_home_page.dart';
+import 'pages/my_video_page.dart';
 import 'pages/my_template_page.dart';
-
 
 void main() async {
   runApp(const MyApp());
+
   //Set Size lazy after loading application
   await setDesktopSize();
 }
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       //home: const MyHomePage(title: 'Flutterino Home Page'),
       routes: {
         '/': (context) => const MyTemplatePage(),
-        '/home': (context) => const MyHomePage(),
+        //MyVideoPage.routeName : (context) => const MyVideoPage(),
         '/listOfAll': (context) => const MyListPage(),
         '/settings': (context) => const MySettingsPage(),
         '/myCollections': (context) => const MyCollectionsOverviewPage(),

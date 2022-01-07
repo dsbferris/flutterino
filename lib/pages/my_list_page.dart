@@ -13,29 +13,30 @@ class MyListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("List Page"),
-        ),
-        drawer: const MyDrawer(),
-        body: FutureBuilder<List<Movie>>(
-          future: futureMovies,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  var movie = snapshot.data![index];
-                  return MyListTileItem(movie: movie);
-                  //return ListTile(title: Text(movie.name),);
-                },
-              );
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
-        ));
+      appBar: AppBar(
+        title: const Text("List Page"),
+      ),
+      drawer: const MyDrawer(),
+      body: FutureBuilder<List<Movie>>(
+        future: futureMovies,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                var movie = snapshot.data![index];
+                return MyListTileItem(movie: movie);
+                //return ListTile(title: Text(movie.name),);
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          } else {
+            return const CircularProgressIndicator();
+          }
+        },
+      ),
+    );
   }
 }
 
